@@ -2,7 +2,7 @@
   <div class="promo-banner" :style="{ backgroundColor: bgColor }">
     <div>
     <h2>{{ title }}</h2>
-    <compon3 :bgColor="buttonColor"/>
+    <compon3 @click = "shopNow()" :bgColor="buttonColor" />
     </div>
     <img :src="image" alt="promo image" class="promo-image" >
   </div>
@@ -23,6 +23,12 @@ export default {
   components:{
     compon3,
   },
+  methods:{
+    shopNow(){
+            alert("Let's shop: "+ this.title);
+        }
+    }
+  
 };
 </script>
 

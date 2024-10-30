@@ -9,16 +9,56 @@ export default {
   data() {
     return {
       categories: [
-        { image: "src/assets/cat-13 1.png",title: "Cake & Milk", items: 14 , bgColor: "#f2fce4"},
-        { title: "Peach", items: 17, image: "src/assets/cat-11 1.png", bgColor: "#fffceb" },
-        { title: "Organic Kiwi", items: 21, image: "src/assets/cat-12 1.png", bgColor: "#ecffec"  },
-        { title: "Red Apple", items: 68,image: "src/assets/cat-9 1.png", bgColor: "#feefea"  },
-        { title: "Snack", items: 34, image: "src/assets/cat-3 1.png", bgColor: "#fff3eb"  },
-        { title: "Black plum", items: 25,image: "src/assets/cat-4 1.png", bgColor: "#fff3ff"  },
-        { title: "Vegetables", items: 65, image: "src/assets/cat-1 4.png", bgColor: "#f2fce4" },
-        { title: "Headphone", items: 33, image: "src/assets/cat-15 1.png", bgColor: "#fffceb"  },
-        { title: "Cake & Milk", items: 54, image: "src/assets/cat-14 1.png", bgColor: "#f2fce4"  },
-        { title: "Orange", items: 63,image: "src/assets/cat-7 1.png", bgColor: "#fff3ff"  },
+        { image: "src/assets/cat-13 1.png",
+          title: "Cake & Milk", 
+          items: 14 , 
+          bgColor: "#f2fce4"
+        },
+        { title: "Peach", 
+          items: 17, 
+          image: "src/assets/cat-11 1.png", 
+          bgColor: "#fffceb" 
+        },
+        { title: "Organic Kiwi", 
+          items: 21, 
+          image: "src/assets/cat-12 1.png", 
+          bgColor: "#ecffec"  
+        },
+        { title: "Red Apple", 
+          items: 68,
+          image: "src/assets/cat-9 1.png", 
+          bgColor: "#feefea"  
+        },
+        { title: "Snack", 
+          items: 34, 
+          image: "src/assets/cat-3 1.png", 
+          bgColor: "#fff3eb"  
+        },
+        { title: "Black plum", 
+          items: 25,
+          image: "src/assets/cat-4 1.png", 
+          bgColor: "#fff3ff"  
+        },
+        { title: "Vegetables", 
+          items: 65, 
+          image: "src/assets/cat-1 4.png", 
+          bgColor: "#f2fce4" 
+        },
+        { title: "Headphone", 
+          items: 33, 
+          image: "src/assets/cat-15 1.png", 
+          bgColor: "#fffceb"  
+        },
+        { title: "Cake & Milk", 
+          items: 54, 
+          image: "src/assets/cat-14 1.png", 
+          bgColor: "#f2fce4"  
+        },
+        { title: "Orange", 
+          items: 63,
+          image: "src/assets/cat-7 1.png", 
+          bgColor: "#fff3ff"  
+        },
       ],
       promos: [
         {
