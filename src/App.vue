@@ -1,6 +1,7 @@
 <script>
 import compon1 from './components/compon1.vue';
 import compon2 from './components/compon2.vue';
+import axios from 'axios';
 export default {
   name: "App",
   components: {
@@ -9,79 +10,31 @@ export default {
   data() {
     return {
       categories: [
-        { image: "src/assets/cat-13 1.png",
-          title: "Cake & Milk", 
-          items: 14 , 
-          bgColor: "#f2fce4"
-        },
-        { title: "Peach", 
-          items: 17, 
-          image: "src/assets/cat-11 1.png", 
-          bgColor: "#fffceb" 
-        },
-        { title: "Organic Kiwi", 
-          items: 21, 
-          image: "src/assets/cat-12 1.png", 
-          bgColor: "#ecffec"  
-        },
-        { title: "Red Apple", 
-          items: 68,
-          image: "src/assets/cat-9 1.png", 
-          bgColor: "#feefea"  
-        },
-        { title: "Snack", 
-          items: 34, 
-          image: "src/assets/cat-3 1.png", 
-          bgColor: "#fff3eb"  
-        },
-        { title: "Black plum", 
-          items: 25,
-          image: "src/assets/cat-4 1.png", 
-          bgColor: "#fff3ff"  
-        },
-        { title: "Vegetables", 
-          items: 65, 
-          image: "src/assets/cat-1 4.png", 
-          bgColor: "#f2fce4" 
-        },
-        { title: "Headphone", 
-          items: 33, 
-          image: "src/assets/cat-15 1.png", 
-          bgColor: "#fffceb"  
-        },
-        { title: "Cake & Milk", 
-          items: 54, 
-          image: "src/assets/cat-14 1.png", 
-          bgColor: "#f2fce4"  
-        },
-        { title: "Orange", 
-          items: 63,
-          image: "src/assets/cat-7 1.png", 
-          bgColor: "#fff3ff"  
-        },
+        
       ],
       promos: [
-        {
-          title: "Everyday Fresh & Clean with Our Products",
-          image: "src/assets/Cms-04 1.png",
-          bgColor: "#f0e8d5",
-          buttonColor: "#34a853",
-        },
-        {
-          title: "Make your Breakfast Healthy and Easy",
-          image: "src/assets/Cat-01 1.png",
-          bgColor: "#f3e8e8",
-          buttonColor: "#34a853",
-        },
-        {
-          title: "The best Organic Products Online",
-          image: "src/assets/Cms-03 1.png",
-          bgColor: "#e7eaf3",
-          buttonColor: "#f5cb0f",
-        },
+       
       ],
     };
   },
+  mounted () {
+          // Mounted life cycle - It will be executed every time
+          // this component is loaded
+          this.fetchCategories()
+          this.fetchPromotions()
+     },
+  methods: {
+         fetchCategories() { 
+           axios.get("http://localhost:3000/api/categories").then((result)=>{
+            this.categories = result.data
+           })
+         },
+         fetchPromotions() {
+          axios.get("http://localhost:3000/api/promotions").then((result)=>{
+            this.promos = result.data
+           })
+     },
+},
 };
 </script>
 <template>
@@ -90,11 +43,12 @@ export default {
     <div class="category-row">
       <compon1
         v-for="(category, index) in categories"
+      
         :key="index"
-        :title="category.title"
-        :items="category.items"
+        :name="category.name"
+        :productCount="category.productCount"
         :image="category.image"
-        :bgColor="category.bgColor"
+        :color="category.color"
       />
     </div>
     <div class="promo-row">
@@ -103,7 +57,7 @@ export default {
         :key="index"
         :title="promo.title"
         :image="promo.image"
-        :bgColor="promo.bgColor"
+        :color="promo.color"
         :buttonColor="promo.buttonColor"
       />
     </div>

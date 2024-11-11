@@ -1,22 +1,23 @@
 <template>
-  <div class="category-card" :style="{ backgroundColor: bgColor }">
+  <div class="category-card" :style="{ backgroundColor: color }">
     <img :src="image" alt="category image" class="category-image" >
-    <h3>{{ title }}</h3>
-    <p>{{ items }} items</p>
+    <h3>{{ name }}</h3>
+    <p>{{ productCount }} items</p>
+
   </div>
 </template>
 <script>
 export default {
   name: "compon1",
   props: {
-    title: String,
-    items: Number,
+    name: String,
+    productCount: Number,
     image: String,
-    bgColor: String,
+    color: String,
   },
 };
 </script>
-<style scoped>
+<style>
 .category-card {
   display: flex;
   flex-direction: column;

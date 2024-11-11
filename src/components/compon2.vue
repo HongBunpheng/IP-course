@@ -1,5 +1,5 @@
 <template>
-  <div class="promo-banner" :style="{ backgroundColor: bgColor }">
+  <div class="promo-banner" :style="{ backgroundColor: color }">
     <div>
     <h2>{{ title }}</h2>
     <compon3 @click = "shopNow()" :bgColor="buttonColor" />
@@ -15,7 +15,7 @@ export default {
   props: {
     title: String,
     image: String,
-    bgColor: String,
+    color: String,
     buttonColor: { 
       type: String,
     }
@@ -25,10 +25,9 @@ export default {
   },
   methods:{
     shopNow(){
-            alert("Let's shop: "+ this.title);
+        alert("Let's shop: "+ this.title);
         }
     }
-  
 };
 </script>
 

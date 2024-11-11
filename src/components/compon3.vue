@@ -1,5 +1,5 @@
 <template>
-    <div class="content">
+    <div class>
       <button class="shop-now" :style="{ backgroundColor: bgColor }">Shop Now →</button>
     </div>
 </template>
