@@ -1,59 +1,77 @@
 <script>
-import compon1 from './components/compon1.vue';
-import compon2 from './components/compon2.vue';
-import axios from 'axios';
+import category from './components/catagory.vue';
+import promotion from './components/promotion.vue';
+import Product from './components/Product.vue';
+import { useProductStore } from './stores/productStore';
+import { onMounted } from 'vue';
+import { mapState } from 'pinia';
+
 export default {
   name: "App",
   components: {
-    compon1,compon2
+    category,
+    promotion,
+    Product
   },
-  data() {
+
+  setup() {
+    const productStore = useProductStore();
+
+    // Load all data on component mount
+    onMounted(() => {
+      productStore.loadAllData();
+    });
+    
+    // Define any reactive properties needed for getters
+    const currentGroupName = 'fruits'; // example
+    const selectedCategoryId = 1; // example category ID
+
     return {
-      categories: [
-        
-      ],
-      promos: [
-       
-      ],
+      currentGroupName,
+      selectedCategoryId,
+      productStore
     };
   },
-  mounted () {
-          // Mounted life cycle - It will be executed every time
-          // this component is loaded
-          this.fetchCategories()
-          this.fetchPromotions()
-     },
-  methods: {
-         fetchCategories() { 
-           axios.get("http://localhost:3000/api/categories").then((result)=>{
-            this.categories = result.data
-           })
-         },
-         fetchPromotions() {
-          axios.get("http://localhost:3000/api/promotions").then((result)=>{
-            this.promos = result.data
-           })
-     },
-},
+
+  computed: {
+  ...mapState(useProductStore, {
+    popularProducts: 'getPopularProducts' 
+  }),
+
+  categories() {
+    return this.productStore.getCategoriesByGroup(this.currentGroupName);
+  },
+  promotions() {
+    return this.productStore.getCategoriesByGroup(this.currentGroupName);
+  },
+  productsByGroup() {
+    return this.productStore.getProductsByGroup(this.currentGroupName);
+  },
+  productsByCategory() {
+    return this.productStore.getProductsByCategory(this.selectedCategoryId);
+  }
+}
 };
 </script>
+
 <template>
   <div class="app">
-    <h1>This is my first VueJs project</h1>
+    <!-- Category Section -->
     <div class="category-row">
-      <compon1
+      <category
         v-for="(category, index) in categories"
-      
         :key="index"
         :name="category.name"
         :productCount="category.productCount"
         :image="category.image"
         :color="category.color"
-      />
+      /> 
     </div>
+
+    <!-- Promotion Section -->
     <div class="promo-row">
-      <compon2
-        v-for="(promo, index) in promos"
+      <promotion
+        v-for="(promo, index) in promotions"
         :key="index"
         :title="promo.title"
         :image="promo.image"
@@ -61,31 +79,42 @@ export default {
         :buttonColor="promo.buttonColor"
       />
     </div>
+
+    <!-- Product Section -->
+    <div class="product-row">
+      <Product
+        v-for="product in productsByGroup"
+        :key="product.id"
+        :name="product.name"
+        :rating="product.rating"
+        :size="product.size"
+        :image="product.image"
+        :price="product.price"
+        :promotionAsPercentage="product.promotionAsPercentage"
+        :categoryId="product.categoryId"
+        :instock="product.instock"
+        :countSold="product.countSold"
+        :group="product.group"
+      />
+    </div>
   </div>
 </template>
+
 <style>
-template{
-  position: relative;
-}
 .app {
   position: absolute;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 20px;
-  left:11%;
+  left: 11%;
   right: 10%;
   top: 15%;
 }
-.category-row {
+.category-row, .promo-row, .product-row {
   display: flex;
   flex-direction: row;
   gap: 15px;
   margin-bottom: 10px;
 }
-.promo-row {
-  display: flex;
-  gap: 15px;
-}
 </style>
-

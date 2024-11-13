@@ -2,16 +2,16 @@
   <div class="promo-banner" :style="{ backgroundColor: color }">
     <div>
     <h2>{{ title }}</h2>
-    <compon3 @click = "shopNow()" :bgColor="buttonColor" />
+    <mybutton @click = "shopNow()" :bgColor="buttonColor" />
     </div>
     <img :src="image" alt="promo image" class="promo-image" >
   </div>
 </template>
 
 <script>
-import compon3 from './compon3.vue';
+import mybutton from './mybutton.vue';
 export default {
-  name: "compon2",
+  name: "promotion",
   props: {
     title: String,
     image: String,
@@ -21,7 +21,7 @@ export default {
     }
   },
   components:{
-    compon3,
+    mybutton,
   },
   methods:{
     shopNow(){

@@ -8,7 +8,7 @@
 </template>
 <script>
 export default {
-  name: "compon1",
+  name: "category",
   props: {
     name: String,
     productCount: Number,
