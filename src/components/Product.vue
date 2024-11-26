@@ -1,25 +1,26 @@
 <template>
+  <div class="container">
     <div class="product">
       <img :src="image" :alt="name" class="product-image" />
       <h3 class="product-name">{{ name }}</h3>
+      <p class="product-rating">Rating: {{ rating }}</p>
       <p class="product-size">{{ size }}</p>
-      <p class="product-price">$ {{ price }}</p>
-      <p class="product-rating">Rating: {{ rating }} / 5</p>
+      <p class="product-price">{{ price }}</p>
       <p class="product-instock">In Stock: {{ instock }}</p>
-      <p v-if="countSold > 10" class="product-popular">Popular Product!</p>
     </div>
+  </div>
   </template>
   
   <script>
   export default {
-    name: "Product",
+    name: "product",
     props: {
       name: String,
-      rating: Number,
+      rating: String,
       size: String,
       image: String,
-      price: Number,
-      promotionAsPercentage: Number,
+      price: String,
+      promotionAsPercentage: String,
       categoryId: Number,
       instock: Number,
       countSold: Number,
@@ -29,19 +30,26 @@
   </script>
   
   <style>
+  .container {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  }
   .product {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    border: 1px solid #ccc;
+    align-items:first baseline;
+    border: 1px solid lightgray;
     padding: 10px;
-    border-radius: 5px;
+    margin: 3px;
+    border-radius: 10px;
     width: 200px;
+    background-color: white;
   }
   .product-image {
-    width: 100%;
-    height: auto;
-    margin-bottom: 10px;
+    width: 90%;
+    height: 80%;
+    margin-bottom: 5px;
+    margin: 0 auto;
   }
   .product-name {
     font-weight: bold;
@@ -49,10 +57,14 @@
   }
   .product-price {
     color: green;
+    font-size: 17px;
   }
   .product-popular {
     color: orange;
     font-weight: bold;
+  }
+  .product-rating{
+    color: orange;
   }
   </style>
   

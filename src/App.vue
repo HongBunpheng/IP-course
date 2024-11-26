@@ -3,75 +3,101 @@ import category from './components/catagory.vue';
 import promotion from './components/promotion.vue';
 import Product from './components/Product.vue';
 import { useProductStore } from './stores/productStore';
-import { onMounted } from 'vue';
-import { mapState } from 'pinia';
+import Menu from './components/Menu.vue';
+import { ref, computed, onMounted } from 'vue';
 
 export default {
   name: "App",
   components: {
+    Menu,
     category,
     promotion,
-    Product
+    Product,
   },
-
   setup() {
     const productStore = useProductStore();
 
-    // Load all data on component mount
-    onMounted(() => {
-      productStore.loadAllData();
+    // Independent state for category menu
+    const selectedGroup = ref("All");
+
+    // Independent state for product menu
+    const selectedProductGroup = ref("All");
+
+    // Compute unique group names for categories
+    const uniqueGroups = computed(() => {
+      const groups = productStore.categories.map((cat) => cat.group);
+      return ["All", ...new Set(groups)];
     });
-    
-    // Define any reactive properties needed for getters
-    const currentGroupName = 'fruits'; // example
-    const selectedCategoryId = 1; // example category ID
+
+    // Compute unique group names for products
+    const uniqueProductGroups = computed(() => {
+      const groups = productStore.products.map((product) => product.group);
+      return ["All", ...new Set(groups)];
+    });
+
+    // Filter categories by the selected group
+    const filteredCategories = computed(() => {
+      if (selectedGroup.value === "All") return productStore.categories;
+      return productStore.categories.filter(
+        (category) => category.group === selectedGroup.value
+      );
+    });
+
+    // Filter products by the selected product group
+    const filteredProducts = computed(() => {
+      if (selectedProductGroup.value === "All") return productStore.products;
+      return productStore.products.filter(
+        (product) => product.group === selectedProductGroup.value
+      );
+    });
+
+    // Fetch initial data
+    onMounted(() => {
+      productStore.fetchGroups();
+      productStore.fetchPromotions();
+      productStore.fetchCategories();
+      productStore.fetchProducts();
+    });
 
     return {
-      currentGroupName,
-      selectedCategoryId,
-      productStore
+      productStore,
+      uniqueGroups,
+      uniqueProductGroups,
+      filteredCategories,
+      filteredProducts,
+      selectedGroup,
+      selectedProductGroup,
     };
   },
-
-  computed: {
-  ...mapState(useProductStore, {
-    popularProducts: 'getPopularProducts' 
-  }),
-
-  categories() {
-    return this.productStore.getCategoriesByGroup(this.currentGroupName);
-  },
-  promotions() {
-    return this.productStore.getCategoriesByGroup(this.currentGroupName);
-  },
-  productsByGroup() {
-    return this.productStore.getProductsByGroup(this.currentGroupName);
-  },
-  productsByCategory() {
-    return this.productStore.getProductsByCategory(this.selectedCategoryId);
-  }
-}
 };
 </script>
 
 <template>
   <div class="app">
-    <!-- Category Section -->
+    <!-- Menu for Categories -->
+    <div class="menuCategorybar">
+    <div>Featured Categories</div>
+    <Menu
+      :menuItems="uniqueGroups"
+      @menu-selected="(group) => (selectedGroup = group)"
+    ></Menu>
+    </div>
+    <!-- Category Row -->
     <div class="category-row">
       <category
-        v-for="(category, index) in categories"
+        v-for="(category, index) in filteredCategories"
         :key="index"
         :name="category.name"
         :productCount="category.productCount"
         :image="category.image"
         :color="category.color"
-      /> 
+      />
     </div>
 
-    <!-- Promotion Section -->
+    <!-- Promotion Row -->
     <div class="promo-row">
       <promotion
-        v-for="(promo, index) in promotions"
+        v-for="(promo, index) in productStore.promotions"
         :key="index"
         :title="promo.title"
         :image="promo.image"
@@ -79,12 +105,18 @@ export default {
         :buttonColor="promo.buttonColor"
       />
     </div>
-
-    <!-- Product Section -->
+    <div class="menuProductbar">
+    <div>Popular Product</div>
+    <Menu
+      :menuItems="uniqueProductGroups"
+      @menu-selected="(group) => (selectedProductGroup = group)"
+    ></Menu>
+    </div>
+    <!-- Product Row -->
     <div class="product-row">
       <Product
-        v-for="product in productsByGroup"
-        :key="product.id"
+        v-for="(product, index) in filteredProducts"
+        :key="index"
         :name="product.name"
         :rating="product.rating"
         :size="product.size"
@@ -111,10 +143,25 @@ export default {
   right: 10%;
   top: 15%;
 }
-.category-row, .promo-row, .product-row {
+.category-row, .promo-row{
   display: flex;
   flex-direction: row;
   gap: 15px;
   margin-bottom: 10px;
+}
+.product-row{
+  display: grid;
+  grid-template-columns: auto auto auto auto auto auto;
+  gap:11px;
+}
+.menuCategorybar{
+  display: flex;
+  gap:500px;
+  font-size: larger;
+}
+.menuProductbar{
+  display: flex;
+  gap:800px;
+  font-size: larger;
 }
 </style>
