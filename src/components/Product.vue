@@ -32,7 +32,7 @@
   <style>
   .container {
   display: grid;
-  grid-template-columns: auto auto auto;
+ 
   }
   .product {
     display: flex;
