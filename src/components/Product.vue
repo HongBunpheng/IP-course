@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <router-link to="ProductView">
     <div class="product">
       <img :src="image" :alt="name" class="product-image" />
       <h3 class="product-name">{{ name }}</h3>
@@ -8,6 +9,7 @@
       <p class="product-price">{{ price }}</p>
       <p class="product-instock">In Stock: {{ instock }}</p>
     </div>
+    </router-link>
   </div>
   </template>
   

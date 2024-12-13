@@ -47,6 +47,6 @@ button:hover{
   color:green;
 }
 button.active{
-  color: yellow;
+  color: #1abc9c;
 }
 </style>

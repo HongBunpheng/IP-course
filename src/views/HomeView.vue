@@ -1,10 +1,12 @@
 <script>
-import category from '../components/catagory.vue';
-import promotion from '../components/promotion.vue';
-import Product from '../components/Product.vue';
-import { useProductStore } from '../stores/productStore';
-import Menu from '../components/Menu.vue';
-import { ref, computed, onMounted } from 'vue';
+import category from "../components/catagory.vue";
+import promotion from "../components/promotion.vue";
+import Product from "../components/Product.vue";
+import { useProductStore } from "../stores/productStore";
+import Menu from "../components/Menu.vue";
+import Showcase from "../components/showCase.vue";
+import { ref, computed, onMounted } from "vue";
+
 
 export default {
   name: "HomeView",
@@ -13,6 +15,11 @@ export default {
     category,
     promotion,
     Product,
+    Showcase,
+  },
+  data() {
+    return {
+    };
   },
   setup() {
     const productStore = useProductStore();
@@ -22,6 +29,14 @@ export default {
 
     // Independent state for product menu
     const selectedProductGroup = ref("All");
+
+    const searchQuery = ref("");
+    const searchResults = computed(() => {
+      if (!searchQuery.value) return productStore.products;
+      return productStore.products.filter((product) =>
+        product.name.toLowerCase().includes(searchQuery.value.toLowerCase())
+      );
+    });
 
     // Compute unique group names for categories
     const uniqueGroups = computed(() => {
@@ -45,8 +60,8 @@ export default {
 
     // Filter products by the selected product group
     const filteredProducts = computed(() => {
-      if (selectedProductGroup.value === "All") return productStore.products;
-      return productStore.products.filter(
+      if (selectedProductGroup.value === "All") return searchResults.value;
+      return searchResults.value.filter(
         (product) => product.group === selectedProductGroup.value
       );
     });
@@ -67,6 +82,7 @@ export default {
       filteredProducts,
       selectedGroup,
       selectedProductGroup,
+      searchQuery,
     };
   },
 };
@@ -74,13 +90,15 @@ export default {
 
 <template>
   <div class="app">
+    <!-- Showcase -->
+      <Showcase />
     <!-- Menu for Categories -->
     <div class="menuCategorybar">
-    <div>Featured Categories</div>
-    <Menu
-      :menuItems="uniqueGroups"
-      @menu-selected="(group) => (selectedGroup = group)"
-    ></Menu>
+      <div>Featured Categories</div>
+      <Menu
+        :menuItems="uniqueGroups"
+        @menu-selected="(group) => (selectedGroup = group)"
+      ></Menu>
     </div>
     <!-- Category Row -->
     <div class="category-row">
@@ -105,12 +123,14 @@ export default {
         :buttonColor="promo.buttonColor"
       />
     </div>
+
+    <!-- Menu for Products -->
     <div class="menuProductbar">
-    <div>Popular Product</div>
-    <Menu
-      :menuItems="uniqueProductGroups"
-      @menu-selected="(group) => (selectedProductGroup = group)"
-    ></Menu>
+      <div>Popular Product</div>
+      <Menu
+        :menuItems="uniqueProductGroups"
+        @menu-selected="(group) => (selectedProductGroup = group)"
+      ></Menu>
     </div>
     <!-- Product Row -->
     <div class="product-row">
@@ -129,39 +149,39 @@ export default {
         :group="product.group"
       />
     </div>
+    
   </div>
 </template>
 
 <style>
 .app {
-  position: absolute;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 20px;
-  left: 11%;
-  right: 10%;
-  top: 15%;
 }
-.category-row, .promo-row{
+.category-row,
+.promo-row {
   display: flex;
   flex-direction: row;
   gap: 15px;
   margin-bottom: 10px;
 }
-.product-row{
+.product-row {
   display: grid;
   grid-template-columns: auto auto auto auto auto auto;
-  gap:11px;
+  gap: 11px;
 }
-.menuCategorybar{
+.menuCategorybar {
   display: flex;
-  gap:500px;
+  gap: 500px;
   font-size: larger;
 }
-.menuProductbar{
+.menuProductbar {
   display: flex;
-  gap:800px;
+  gap: 800px;
   font-size: larger;
 }
+
+
 </style>

@@ -1,10 +1,11 @@
 <template>
+  <router-link to="CategoryView">
   <div class="category-card" :style="{ backgroundColor: color }">
     <img :src="image" alt="category image" class="category-image" >
     <h3>{{ name }}</h3>
     <p>{{ productCount }} items</p>
-
   </div>
+</router-link>
 </template>
 <script>
 export default {
