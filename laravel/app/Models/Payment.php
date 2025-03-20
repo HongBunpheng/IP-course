@@ -12,6 +12,7 @@ class Payment extends Model
     use HasFactory;
 
     protected $fillable = ['customer_id', 'order_id', 'amount', 'payment_method'];
+    protected $table = 'payment';
 
     public function customer()
     {

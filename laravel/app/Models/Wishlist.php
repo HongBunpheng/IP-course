@@ -11,6 +11,7 @@ class Wishlist extends Model
     use SoftDeletes;
     use HasFactory;
 
+    protected $table = 'wishlist';
     protected $fillable = ['customer_id', 'product_id'];
 
     public function customer()

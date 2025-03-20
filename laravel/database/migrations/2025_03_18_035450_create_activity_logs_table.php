@@ -17,7 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('model_id')->nullable(); // Record ID
             $table->string('action'); // create, update, delete
             $table->json('changes')->nullable(); // Old and new data
-            $table->timestamps('created_at');
+            $table->timestamps();
         });
     }
 

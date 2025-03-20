@@ -10,8 +10,9 @@ class Cart extends Model
 {
     use SoftDeletes;
     use HasFactory;
-
-    protected $fillable = ['customer_id', 'product_id', 'quantity'];
+    
+    protected $table = 'carts';
+    protected $fillable = ['customer_id', 'product_id'];
 
     public function customer()
     {
