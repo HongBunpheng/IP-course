@@ -37,7 +37,7 @@ services:
     environment:
       MYSQL_DATABASE: laravel_test
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_USER: Laravel_test
+      MYSQL_USER: laravel_test
       MYSQL_PASSWORD: laravel_test
     ports:
     - "3308:3306"
