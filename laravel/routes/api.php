@@ -15,14 +15,15 @@ Route::get('/user', function (Request $request) {
 
 // Category Routes
 Route::controller(CategoryController::class)->prefix('categories')->group(function () {
-    Route::get('/', 'getCategories'); // Fetch all categories
-    Route::post('/', 'createCategory'); // Create a new category
-    Route::get('/{categoryId}', 'getCategory'); // Fetch a specific category
-    Route::patch('/{categoryId}', 'updateCategory'); // Update a specific category
-    Route::delete('/{categoryId}', 'deleteCategory'); // Delete a specific category
-    Route::get('/count-active', 'countActiveCategories'); // Count active categories
-    Route::post('/find-or-create', 'findOrCreateCategory'); // Find or create a category
-    Route::delete('/truncate', 'truncateCategories'); // Truncate the categories table
+    Route::get('/', 'getCategories');
+    Route::post('/', 'createCategory');
+    Route::get('/{categoryId}', 'getCategory');
+    Route::patch('/{categoryId}', 'updateCategory');
+    Route::put('/{categoryId}', 'updateCategory');
+    Route::delete('/{categoryId}', 'deleteCategory');
+    Route::get('/count-active', 'countActiveCategories');
+    Route::post('/find-or-create', 'findOrCreateCategory');
+    Route::delete('/truncate', 'truncateCategories');
 });
 
 // Product Routes
@@ -31,5 +32,7 @@ Route::controller(ProductController::class)->prefix('products')->group(function(
     Route::post("/", 'createProduct');
     Route::get("/{productId}", 'getProduct');
     Route::patch("/{productId}", 'updateProduct');
+    Route::put("/{productId}", 'updateProduct');
     Route::delete("/{productId}", 'deleteProduct');
 });
+

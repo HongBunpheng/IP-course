@@ -11,7 +11,7 @@ use App\Models\Customer;
 use App\Models\Category;
 use Carbon\Carbon;
 
-class OrderProductTest extends TestCase
+class OrderproductTest extends TestCase
 {
     use RefreshDatabase;
 

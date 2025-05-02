@@ -4,77 +4,112 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Product;
+use App\Models\Category;
 use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
-   /**
-     * Display a listing of the resource.
+    /**
+     * Display all products with categories.
      */
     public function getProducts()
     {
         $products = Product::with('category')->get();
-        return response()->json($products);
+
+        if ($products->isEmpty()) {
+            return response()->json(["message" => "No products found"]);
+        }
+
+        return response()->json([
+            'message' => 'Success',
+            'data' => $products
+        ]);
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Create a new product with optional image uploads.
      */
     public function createProduct(Request $request)
     {
         $imagePaths = [];
-    if ($request->hasFile('images')) {
-        foreach ($request->file('images') as $image) {
-            // Store each image in the public/products directory
-            $path = $image->store('products', 'public');
-            $imagePaths[] = $path; // Store the file path in an array
+
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $image) {
+                $path = $image->store('products', 'public');
+                $imagePaths[] = $path;
+            }
         }
-    }
 
         $product = Product::create([
-            'name' => $request->name,
+            'name'        => $request->name,
             'category_id' => $request->category_id,
-            'pricing' => $request->pricing,
+            'pricing'     => $request->pricing,
             'description' => $request->description,
-            'images' => $imagePaths
+            'images'      => $imagePaths
         ]);
 
-
-        if(!$product){
+        if (!$product) {
             return response()->json(['message' => 'Error creating product'], 400);
         }
 
-        return response()->json(['message' => 'Creating a new product', 'product' => $product], 201);
+        return response()->json([
+            'message' => 'Product created successfully',
+            'data' => $product
+        ], 201);
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Get a specific product by ID with category.
      */
-    public function getProduct( $productId)
+    public function getProduct($productId)
     {
         $product = Product::with('category')->find($productId);
 
-        return response()->json($product);
+        if (!$product) {
+            return response()->json(['message' => 'Product not found'], 404);
+        }
+
+        return response()->json([
+            'message' => 'Success',
+            'data' => $product
+        ]);
     }
 
     /**
-     * Display the specified resource.
+     * Update a product by ID.
      */
     public function updateProduct(Request $request, $productId)
     {
         $product = Product::find($productId);
 
-        $product->update($request->all());
+        if (!$product) {
+            return response()->json(['message' => 'Product not found'], 404);
+        }
+
+        $product->update($request->only([
+            'name',
+            'category_id',
+            'pricing',
+            'description',
+            'images' // only if sending as array
+        ]));
 
         return response()->json([
             'message' => 'Product updated successfully',
-            'product' => $product->fresh()
+            'data' => $product->fresh()
         ]);
     }
 
-    public function deleteProduct( $productId)
+    /**
+     * Delete a product by ID and remove its images.
+     */
+    public function deleteProduct($productId)
     {
         $product = Product::find($productId);
+
+        if (!$product) {
+            return response()->json(['message' => 'Product not found'], 404);
+        }
 
         if ($product->images) {
             foreach ($product->images as $image) {
@@ -83,6 +118,7 @@ class ProductController extends Controller
         }
 
         $product->delete();
+
         return response()->json(['message' => 'Product deleted successfully']);
     }
 }

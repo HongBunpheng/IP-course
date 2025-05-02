@@ -7,7 +7,8 @@ use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
-    public function getCategories(){
+    public function getCategories()
+    {
         $categories = Category::all();
         if ($categories->isEmpty()) {
             return response()->json(["message" => "No categories found"]);
@@ -15,15 +16,17 @@ class CategoryController extends Controller
         return response()->json(["data" => $categories]);
     }
 
-    public function createCategory(Request $request){
+    public function createCategory(Request $request)
+    {
         $category = Category::create($request->only(['name']));
         return response()->json([
             "message" => "Category created successfully",
             "data" => $category
-        ]);
+        ], 201); // ✅ set 201 status
     }
 
-    public function getCategory($categoryId){
+    public function getCategory($categoryId)
+    {
         $category = Category::find($categoryId);
         if (!$category) {
             return response()->json(["message" => "Category not found"], 404);
@@ -31,12 +34,13 @@ class CategoryController extends Controller
         return response()->json(["data" => $category]);
     }
 
-    public function updateCategory(Request $request, $categoryId){
+    public function updateCategory(Request $request, $categoryId)
+    {
         $category = Category::find($categoryId);
-
         if (!$category) {
             return response()->json(["message" => "Category not found"], 404);
         }
+
         $category->update($request->only(['name']));
         return response()->json([
             "message" => "Category updated successfully",
@@ -44,16 +48,19 @@ class CategoryController extends Controller
         ]);
     }
 
-    public function deleteCategory($categoryId){
+    public function deleteCategory($categoryId)
+    {
         $category = Category::find($categoryId);
         if (!$category) {
             return response()->json(["message" => "Category not found"], 404);
         }
+
         $category->delete();
         return response()->json(["message" => "Category deleted successfully"]);
     }
 
-    public function countActiveCategories(){
+    public function countActiveCategories()
+    {
         $count = Category::where('active', 1)->count();
         return response()->json([
             "message" => "Active categories count retrieved successfully",
@@ -61,7 +68,8 @@ class CategoryController extends Controller
         ]);
     }
 
-    public function findOrCreateCategory(Request $request){
+    public function findOrCreateCategory(Request $request)
+    {
         $category = Category::firstOrCreate(['name' => $request->name]);
         return response()->json([
             "message" => "Category retrieved or created successfully",
@@ -69,7 +77,8 @@ class CategoryController extends Controller
         ]);
     }
 
-    public function truncateCategories(){
+    public function truncateCategories()
+    {
         Category::truncate();
         return response()->json(["message" => "Categories table truncated successfully"]);
     }
