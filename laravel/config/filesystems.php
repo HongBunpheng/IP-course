@@ -41,7 +41,7 @@ return [
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
-            'url' => env('APP_URL').'/storage',
+            'url' => env('APP_URL') . '/storage',
             'visibility' => 'public',
             'throw' => false,
             'report' => false,
@@ -59,6 +59,23 @@ return [
             'throw' => false,
             'report' => false,
         ],
+
+        'minio' => [
+            'driver'                  => 's3',
+            'key'                     => env('MINIO_ACCESS_KEY_ID'),
+            'secret'                  => env('MINIO_SECRET_ACCESS_KEY'),
+            'region'                  => env('MINIO_REGION', 'us-east-1'),
+            'bucket'                  => env('MINIO_BUCKET'),
+            'endpoint'                => env('MINIO_ENDPOINT'),
+            'url'                     => env('MINIO_ENDPOINT'),
+            'use_path_style_endpoint' => true,
+            'version'                 => 'latest',            // ← required by AWS SDK
+            'options'                 => [
+                'connect_timeout' => 5,
+                'timeout'         => 10,
+            ],
+        ],
+
 
     ],
 
