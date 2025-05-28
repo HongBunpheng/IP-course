@@ -1,70 +1,36 @@
 <template>
   <ul class="todoLists">
-    <template v-if="status == 'completed'">
-      <TodoItem
-        v-for="todo of completedTasks"
-        icon="uil-adobe-alt"
-        :todo="todo"
-      />
-    </template>
-    <template v-else>
-      <TodoItem
-        v-for="todo of pendingTasks"
-        icon="uil-adobe-alt"
-        :todo="todo"
-      />
-    </template>
+    <TodoItem
+      v-for="todo in filteredTasks"
+      :key="todo.id"
+      icon="uil-adobe-alt"
+      :todo="todo"
+    />
   </ul>
 </template>
-<script>
-import { mapState } from "pinia";
-import TodoItem from "./TodoItem.vue";
-import { useTodoStore } from "../stores/todo";
 
-export default {
-  setup() {
-    const todoStore = useTodoStore();
-    return { todoStore };
-  },
-  name: "TodoList",
-  props: ["status"],
-  components: {
-    TodoItem,
-  },
-  data() {
-    return {
-      color: "red",
-    };
-  },
-  async mounted() {
-    // we will call action fetchTodos
-    await this.todoStore.fetchTodos();
-  },
-  computed: {
-    ...mapState(useTodoStore, ["todos", "countTodos"]),
-    completedTasks() {
-      if (this.todos) {
-        return this.todos.filter((todo) => todo.completedAt != null);
-      }
-      return [];
-    },
-    pendingTasks() {
-      if (this.todos) {
-        // if (this.todos.length > 2) {
-        //   this.todos.push({ task: "new" });
-        // }
-        return this.todos.filter((todo) => todo.completedAt == null);
-      }
-      return [];
-    },
-  },
-  watch: {
-    todos: {
-      immediate: true,
-      handler: function (dataChanged) {
-        console.log("todos are changed");
-      },
-    },
-  },
-};
+<script setup>
+import { computed, watch, onMounted } from 'vue'
+import { useTodoStore } from '../stores/todo'
+import TodoItem from './TodoItem.vue'
+
+const props = defineProps({
+  status: String,
+})
+
+const store = useTodoStore()
+
+onMounted(() => {
+  store.fetchTodos()
+})
+
+const filteredTasks = computed(() => {
+  return props.status === 'completed'
+    ? store.todos.filter(t => t.completedAt != null)
+    : store.todos.filter(t => t.completedAt == null)
+})
+
+watch(() => store.todos, () => {
+  console.log('✅ todos updated')
+})
 </script>

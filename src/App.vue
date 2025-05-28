@@ -7,11 +7,9 @@
     <h3>Completed Tasks:</h3>
     <TodoLists status="completed" />
     <div class="pending-tasks">
-      <span
-        >You have <span class="pending-num"> {{ nbOfTodo }} </span> tasks
-        pending.</span
-      >
-      <button class="clear-button">Clear All</button>
+      <span>You have <span class="pending-num"> {{ nbOfTodo }} </span> tasks
+        pending.</span>
+      <button class="clear-button" @click="clearAllTodos">Clear All</button>
     </div>
   </div>
 </template>
@@ -40,7 +38,8 @@ export default {
   },
   methods: {
     handleAddTodo(todo) {
-      this.store.addTodo(todo);
+      console.log('📤 Task from AddTodo:', todo)
+      this.store.addTodo(todo)
     },
     clearAllTodos() {
       console.log("clear");
