@@ -13,10 +13,17 @@ import { TaskService } from './task.service';
 export class TasksController {
   constructor(private readonly taskService: TaskService) {}
 
+  // ✅ This is the one you're missing:
+  @Get()
+  getAllTasks() {
+    return this.taskService.getAllTasks();
+  }
+
   @Get('/:id')
   getTask(@Param('id') id: string) {
-    return this.taskService.getTask(id);
+    return this.taskService.getTask(+id);
   }
+
   @Post('/')
   createTask(@Body() body: any) {
     return this.taskService.createTask(body);
@@ -24,16 +31,16 @@ export class TasksController {
 
   @Patch('/:id/done')
   markTaskAsDone(@Body() body: any, @Param('id') id: string) {
-    return this.taskService.updateTask(id, body);
+    return this.taskService.updateTask(+id, body);
   }
 
   @Patch('/:id/pending')
   markTaskAsPending(@Body() body: any, @Param('id') id: string) {
-    return this.taskService.updateTask(id, body);
+    return this.taskService.updateTask(+id, body);
   }
 
   @Delete('/:id')
   deleteTask(@Param('id') id: string) {
-    return this.taskService.deleteTask(id);
+    return this.taskService.deleteTask(+id);
   }
 }

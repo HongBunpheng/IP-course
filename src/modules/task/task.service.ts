@@ -1,39 +1,39 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Task } from './task.entity';
 
 @Injectable()
 export class TaskService {
-  getTask(id: string) {
-    console.log(id);
-    return {
-      name: 'Task 1',
-      description: 'Description of Task 1',
-      createdAt: new Date().toISOString(),
-      completedAt: null,
-      userId: 1,
-    };
+  constructor(
+    @InjectRepository(Task)
+    private taskRepo: Repository<Task>,
+  ) {}
+
+    // ✅ Get one task by ID
+  getTask(id: number) {
+    return this.taskRepo.findOne({ where: { id }, relations: ['user'] });
   }
-  createTask(body: any) {
-    console.log(body);
-    return {
-      name: 'Task 1',
-      description: 'Description of Task 1',
-      createdAt: new Date().toISOString(),
-      completedAt: null,
-      userId: 1,
-    };
+
+  // ✅ Create a task
+  createTask(data: Partial<Task>) {
+    const task = this.taskRepo.create(data);
+    return this.taskRepo.save(task);
   }
-  updateTask(id: string, body: any) {
-    console.log(body);
-    return {
-      name: 'Task 1',
-      description: 'Description of Task 1',
-      createdAt: new Date().toISOString(),
-      completedAt: null,
-      userId: 1,
-    };
+
+  // ✅ Update a task by ID
+  async updateTask(id: number, updateData: Partial<Task>) {
+    await this.taskRepo.update(id, updateData);
+    return this.getTask(id);
   }
-  deleteTask(id: string) {
-    console.log(id);
-    return { message: 'success' };
+
+  // ✅ Delete a task
+  deleteTask(id: number) {
+    return this.taskRepo.delete(id);
   }
+
+  // ✅ Optional: Get all tasks
+  getAllTasks() {
+  return this.taskRepo.find({ relations: ['user'] }); // or just .find()
+}
 }

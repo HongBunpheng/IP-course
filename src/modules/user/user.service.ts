@@ -1,33 +1,36 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common'
+import { InjectRepository } from '@nestjs/typeorm'
+import { Repository } from 'typeorm'
+import { User } from './user.entity'
 
 @Injectable()
 export class UserService {
-  createUser(body: any) {
-    console.log(body);
-    return {
-      username: 'Dara',
-      email: 'dara@gmail.com',
-      password: '123',
-    };
+  constructor(
+    @InjectRepository(User)
+    private usersRepo: Repository<User>,
+  ) {}
+
+  findAll() {
+    return this.usersRepo.find({ relations: ['tasks'] })
   }
+
   getUser(username: string) {
-    console.log(username);
-    return {
-      username: 'Dara',
-      email: 'dara@gmail.com',
-      password: '123',
-    };
+    return this.usersRepo.findOne({
+      where: { username },
+      relations: ['tasks'],
+    })
   }
-  updateUser(body: any) {
-    console.log(body);
-    return {
-      username: 'Dara',
-      email: 'dara@gmail.com',
-      password: '123',
-    };
+
+  createUser(data: Partial<User>) {
+    const user = this.usersRepo.create(data)
+    return this.usersRepo.save(user)
   }
+
+  updateUser(username: string, update: Partial<User>) {
+    return this.usersRepo.update({ username }, update)
+  }
+
   deleteUser(username: string) {
-    console.log(username);
-    return { message: 'success' };
+    return this.usersRepo.delete({ username })
   }
 }
