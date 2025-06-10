@@ -6,14 +6,16 @@ import {
   Param,
   Patch,
   Post,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { TaskService } from './task.service';
+import { CreateTaskDto } from './dto/create-task.dto';
 
 @Controller('tasks')
 export class TasksController {
   constructor(private readonly taskService: TaskService) {}
 
-  // ✅ This is the one you're missing:
   @Get()
   getAllTasks() {
     return this.taskService.getAllTasks();
@@ -24,9 +26,10 @@ export class TasksController {
     return this.taskService.getTask(+id);
   }
 
-  @Post('/')
-  createTask(@Body() body: any) {
-    return this.taskService.createTask(body);
+  @Post()
+  @UsePipes(new ValidationPipe({ whitelist: true }))
+  create(@Body() createTaskDto: CreateTaskDto) {
+    return this.taskService.create(createTaskDto);3
   }
 
   @Patch('/:id/done')
